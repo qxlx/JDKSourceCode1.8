@@ -30,6 +30,7 @@ import sun.security.util.SecurityConstants;
  *        in execution methods requiring {@code Callable}.
  * </ul>
  *
+ * 线程池类
  * @since 1.5
  * @author Doug Lea
  */
@@ -94,6 +95,7 @@ public class Executors {
     }
 
     /**
+     * 创建一个固定的线程池
      * Creates a thread pool that reuses a fixed number of threads
      * operating off a shared unbounded queue, using the provided
      * ThreadFactory to create new threads when needed.  At any point,
@@ -119,7 +121,7 @@ public class Executors {
                                       threadFactory);
     }
 
-    /**
+    /**创建一个单线程类
      * Creates an Executor that uses a single worker thread operating
      * off an unbounded queue. (Note however that if this single
      * thread terminates due to a failure during execution prior to

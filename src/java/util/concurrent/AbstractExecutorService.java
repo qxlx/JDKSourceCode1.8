@@ -82,6 +82,7 @@ public abstract class AbstractExecutorService implements ExecutorService {
      * the given value as its result and provide for cancellation of
      * the underlying task
      * @since 1.6
+     * 将任务包装成FutureTask任务。
      */
     protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T value) {
         return new FutureTask<T>(runnable, value);
@@ -108,7 +109,9 @@ public abstract class AbstractExecutorService implements ExecutorService {
      */
     public Future<?> submit(Runnable task) {
         if (task == null) throw new NullPointerException();
+        //1.将任务包装成RunableFuture对象，由于RunnableFuture是实现Runable类，所以execute的参数是一个可拓展的类型
         RunnableFuture<Void> ftask = newTaskFor(task, null);
+        //2，交给具体的执行器进行实现
         execute(ftask);
         return ftask;
     }

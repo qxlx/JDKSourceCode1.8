@@ -152,6 +152,7 @@ public interface ExecutorService extends Executor {
      *         java.lang.RuntimePermission}{@code ("modifyThread")},
      *         or the security manager's {@code checkAccess} method
      *         denies access.
+     * 关闭线程池，优雅关闭，在执行的任务会执行完毕，不接受新的任务处理请求
      */
     void shutdown();
 
@@ -177,6 +178,7 @@ public interface ExecutorService extends Executor {
      *         java.lang.RuntimePermission}{@code ("modifyThread")},
      *         or the security manager's {@code checkAccess} method
      *         denies access.
+     *        直接关闭线程池，当前正在执行的任务也不处理了，比较粗暴 生产环境不推荐使用
      */
     List<Runnable> shutdownNow();
 
@@ -193,6 +195,8 @@ public interface ExecutorService extends Executor {
      * either {@code shutdown} or {@code shutdownNow} was called first.
      *
      * @return {@code true} if all tasks have completed following shut down
+     * // 如果调用了 shutdown() 或 shutdownNow() 方法后，所有任务结束了，那么返回true
+     *  这个方法必须在调用shutdown或shutdownNow方法之后调用才会返回true
      */
     boolean isTerminated();
 
@@ -206,6 +210,10 @@ public interface ExecutorService extends Executor {
      * @return {@code true} if this executor terminated and
      *         {@code false} if the timeout elapsed before termination
      * @throws InterruptedException if interrupted while waiting
+     *
+     *     // 等待所有任务完成，并设置超时时间
+     * 18     // 我们这么理解，实际应用中是，先调用 shutdown 或 shutdownNow，
+     * 19     // 然后再调这个方法等待所有的线程真正地完成，返回值意味着有没有超时
      */
     boolean awaitTermination(long timeout, TimeUnit unit)
         throws InterruptedException;
@@ -232,6 +240,7 @@ public interface ExecutorService extends Executor {
      * @throws RejectedExecutionException if the task cannot be
      *         scheduled for execution
      * @throws NullPointerException if the task is null
+     * 提交一个Callable任务
      */
     <T> Future<T> submit(Callable<T> task);
 
@@ -247,6 +256,7 @@ public interface ExecutorService extends Executor {
      * @throws RejectedExecutionException if the task cannot be
      *         scheduled for execution
      * @throws NullPointerException if the task is null
+     * 提交一个runnable任务，因为runnable没有返回只，result作为一个返回参数。
      */
     <T> Future<T> submit(Runnable task, T result);
 
