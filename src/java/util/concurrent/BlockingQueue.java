@@ -177,6 +177,7 @@ import java.util.Queue;
  * @author Doug Lea
  * @param <E> the type of elements held in this collection
  */
+//阻塞队列
 public interface BlockingQueue<E> extends Queue<E> {
     /**
      * Inserts the specified element into this queue if it is possible to do
@@ -196,6 +197,8 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this queue
      */
+//   将指定的元素插入到此队列的尾部（如果立即可行且不会超过该队列的容量
+//  在成功时返回 true，如果此队列已满，则抛IllegalStateException。
     boolean add(E e);
 
     /**
@@ -215,6 +218,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this queue
      */
+    //插入队列的尾部
     boolean offer(E e);
 
     /**
@@ -249,6 +253,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this queue
      */
+    //插入队列的尾部，可以设置等待时间，不成功抛出异常
     boolean offer(E e, long timeout, TimeUnit unit)
         throws InterruptedException;
 
@@ -259,6 +264,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      * @return the head of this queue
      * @throws InterruptedException if interrupted while waiting
      */
+    //移除对头部元素。如果没有元素会阻塞
     E take() throws InterruptedException;
 
     /**
@@ -273,6 +279,7 @@ public interface BlockingQueue<E> extends Queue<E> {
      *         specified waiting time elapses before an element is available
      * @throws InterruptedException if interrupted while waiting
      */
+    //移除对头元素
     E poll(long timeout, TimeUnit unit)
         throws InterruptedException;
 
