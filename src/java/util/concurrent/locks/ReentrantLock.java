@@ -113,6 +113,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
      * into fair and nonfair versions below. Uses AQS state to
      * represent the number of holds on the lock.
      */
+    //继承AQS
     abstract static class Sync extends AbstractQueuedSynchronizer {
         private static final long serialVersionUID = -5179523762034025860L;
 
@@ -149,7 +150,9 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             int c = getState() - releases;
             if (Thread.currentThread() != getExclusiveOwnerThread())
                 throw new IllegalMonitorStateException();
+            //是否完全释放锁
             boolean free = false;
+            // c == 0 没有嵌套锁住了 可以释放
             if (c == 0) {
                 free = true;
                 setExclusiveOwnerThread(null);
@@ -195,6 +198,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     /**
      * Sync object for non-fair locks
      */
+    //非公平锁
     static final class NonfairSync extends Sync {
         private static final long serialVersionUID = 7316153563782823691L;
 
@@ -217,9 +221,12 @@ public class ReentrantLock implements Lock, java.io.Serializable {
     /**
      * Sync object for fair locks
      */
+    //sync进行管理锁
+    //公平锁
     static final class FairSync extends Sync {
         private static final long serialVersionUID = -3000897897090466540L;
 
+        //争抢锁🔒
         final void lock() {
             acquire(1);
         }
@@ -229,22 +236,35 @@ public class ReentrantLock implements Lock, java.io.Serializable {
          * recursive call or no waiters or is first.
          */
         protected final boolean tryAcquire(int acquires) {
+            //获取当前线程
             final Thread current = Thread.currentThread();
             int c = getState();
+            // c == 0 当前没有线程获取锁
             if (c == 0) {
+                //当前是公平锁，先来后到
+                //查看队列中是否有等待的线程
+                //hasQueuedPredecessors 没有的话才可以获取线程
+                //compareAndSetState CAS设置 有可能同时多个线程竞争锁
                 if (!hasQueuedPredecessors() &&
                     compareAndSetState(0, acquires)) {
+                    //表示获取到锁了，标记以下
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
+            //当前有线程持有锁，先判断下 获取线程的锁是不是自己 也就是重入了
+            //state += 1;
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
+                //check
                 if (nextc < 0)
                     throw new Error("Maximum lock count exceeded");
                 setState(nextc);
                 return true;
             }
+            //到这里表示没有获取到锁
+            //1.尝试获取失败
+            //2.也不是自己的可冲入锁
             return false;
         }
     }

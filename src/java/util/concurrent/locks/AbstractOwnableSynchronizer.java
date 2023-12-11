@@ -61,6 +61,7 @@ public abstract class AbstractOwnableSynchronizer
     /**
      * The current owner of exclusive mode synchronization.
      */
+    //因为锁是可以冲入的，当嵌套多次的时候，每次用这个判断当前线程是否已经拥有锁
     private transient Thread exclusiveOwnerThread;
 
     /**
@@ -71,6 +72,8 @@ public abstract class AbstractOwnableSynchronizer
      * @param thread the owner thread
      */
     protected final void setExclusiveOwnerThread(Thread thread) {
+        //将当前线程设置为获取到线程
+        //当前拥有锁的线程
         exclusiveOwnerThread = thread;
     }
 

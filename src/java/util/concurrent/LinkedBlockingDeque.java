@@ -78,6 +78,7 @@ public class LinkedBlockingDeque<E>
     extends AbstractQueue<E>
     implements BlockingDeque<E>, java.io.Serializable {
 
+    //通过使用两个lock锁进行并发执行
     /*
      * Implemented as a simple doubly-linked list protected by a
      * single lock and using conditions to manage blocking.
@@ -106,6 +107,7 @@ public class LinkedBlockingDeque<E>
 
     private static final long serialVersionUID = -387911632671998426L;
 
+    //链表节点
     /** Doubly-linked list node class */
     static final class Node<E> {
         /**
@@ -139,6 +141,7 @@ public class LinkedBlockingDeque<E>
      * Invariant: (first == null && last == null) ||
      *            (first.prev == null && first.item != null)
      */
+    //尾节点
     transient Node<E> first;
 
     /**
@@ -146,12 +149,15 @@ public class LinkedBlockingDeque<E>
      * Invariant: (first == null && last == null) ||
      *            (last.next == null && last.item != null)
      */
+    //头节点
     transient Node<E> last;
 
     /** Number of items in the deque */
+    //总个数
     private transient int count;
 
     /** Maximum number of items in the deque */
+    //队列的容量
     private final int capacity;
 
     /** Main lock guarding all access */
@@ -168,6 +174,7 @@ public class LinkedBlockingDeque<E>
      * {@link Integer#MAX_VALUE}.
      */
     public LinkedBlockingDeque() {
+        //默认大小是int最大值
         this(Integer.MAX_VALUE);
     }
 
@@ -177,6 +184,7 @@ public class LinkedBlockingDeque<E>
      * @param capacity the capacity of this deque
      * @throws IllegalArgumentException if {@code capacity} is less than 1
      */
+    //创建指定的阻塞队列
     public LinkedBlockingDeque(int capacity) {
         if (capacity <= 0) throw new IllegalArgumentException();
         this.capacity = capacity;
