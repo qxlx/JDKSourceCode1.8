@@ -161,6 +161,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
             return free;
         }
 
+        // 必须是持有锁的线程
         protected final boolean isHeldExclusively() {
             // While we must in general read state before owner,
             // we don't need to do so to check if current thread is owner
