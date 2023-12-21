@@ -259,10 +259,13 @@ public class ReentrantReadWriteLock
          * and the upper the shared (reader) hold count.
          */
 
+        // 偏移位数
         static final int SHARED_SHIFT   = 16;
         // 共享锁基本单位  左移16位 state+= shared_unit
         static final int SHARED_UNIT    = (1 << SHARED_SHIFT);
+        // 读锁、写锁 可重入最大数量
         static final int MAX_COUNT      = (1 << SHARED_SHIFT) - 1;
+        // 获取低16位的条件
         static final int EXCLUSIVE_MASK = (1 << SHARED_SHIFT) - 1;
 
         /** Returns the number of shared holds represented in count  */
@@ -466,6 +469,7 @@ public class ReentrantReadWriteLock
                 "attempt to unlock read lock, not locked by current thread");
         }
 
+        // 获取读锁
         protected final int tryAcquireShared(int unused) {
             /*
              * Walkthrough:
